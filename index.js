@@ -6,6 +6,11 @@
 /* eslint-disable no-console */
 const morgan = require('morgan');
 const express = require('express');
+const path = require('path');
+const expressStaticGzip = require('express-static-gzip');
+const serverRenderer = require('./dist/server.js').default;
+const clientStats = require('./dist/client-stats.json');
+
 const env = require('./env');
 const { applyMiddleware } = require('./plugins');
 
@@ -21,20 +26,14 @@ if (typeof applyMiddleware === 'function') {
   applyMiddleware(app);
 }
 
-if (process.env.NODE_ENV === 'production') {
-  const path = require('path');
-  const expressStaticGzip = require('express-static-gzip');
-  const serverRenderer = require('./dist/server.js').default;
-  const clientStats = require('./dist/client-stats.json');
-  const distPath = path.join(__dirname, 'dist');
-  app.use(
-    `${env.BASE_URL}/assets`,
-    expressStaticGzip(distPath, {
-      maxAge: '1d',
-    }),
-  );
-  app.use(serverRenderer({ clientStats, currentDirectory: __dirname }));
-}
+const distPath = path.join(__dirname, 'dist');
+app.use(
+  `${env.BASE_URL}/assets`,
+  expressStaticGzip(distPath, {
+    maxAge: '1d',
+  }),
+);
+app.use(serverRenderer({ clientStats, currentDirectory: __dirname }));
 
 /* Set ADMIN_API_USE_SSL to https for CORS support */
 let server;
