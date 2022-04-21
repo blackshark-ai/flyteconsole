@@ -22,7 +22,7 @@ export const serviceName = process.env.SERVICE_NAME || 'not set';
 export const dist = path.join(__dirname, 'dist');
 
 /** Webpack public path. All emitted assets will have relative path to this path */
-export const publicPath = `${env.BASE_URL}/`;
+export const publicPath = `${env.BASE_URL}/assets/`;
 
 // /** True if we are in development mode */
 // export const isDev = env.NODE_ENV === 'development';
@@ -72,7 +72,7 @@ export const imageAndFontsRule: webpack.RuleSetRule = {
 
 export const favIconPlugin = new FavIconWebpackPlugin({
   logo: path.resolve(__dirname, 'src/assets/favicon.png'),
-  prefix: 'assets/', // we can add '[fullhash:8]/' to the end of the file in future
+  prefix: './', // we can add '[fullhash:8]/' to the end of the file in future
 });
 
 /** Write client stats to a JSON file for production */
